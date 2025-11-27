@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.example.papertraderv2.ui.HomeFragment"
+        android:label="Home" />
+
+    <fragment
+        android:id="@+id/nav_search"
+        android:name="com.example.papertraderv2.ui.SearchFragment"
+        android:label="Search" />
+
+    <fragment
+        android:id="@+id/nav_learn"
+        android:name="com.example.papertraderv2.ui.LearnFragment"
+        android:label="Learn" />
+
+    <fragment
+        android:id="@+id/nav_forum"
+        android:name="com.example.papertraderv2.ui.ForumFragment"
+        android:label="Forum" />
+
+    <fragment
+        android:id="@+id/nav_trade"
+        android:name="com.example.papertraderv2.ui.TradeFragment"
+        android:label="Trade" />
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.example.papertraderv2.ui.SettingsFragment"
+        android:label="Settings" />
+
+    <fragment
+        android:id="@+id/tickerDetailsFragment"
+        android:name="com.example.papertraderv2.ui.TickerDetailsFragment"
+        android:label="Details" >
+    </fragment>
+
+</navigation>

@@ -1,64 +1,41 @@
 package com.example.papertraderv2
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.*
+import com.example.papertraderv2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
 
-        // Enable Firebase Crashlytics (safe to keep enabled)
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNav)
-        val topAppBar = findViewById<MaterialToolbar>(R.id.topAppBar)
+        // Find NavHostFragment
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
 
-// Bottom nav actions
-        bottomNav.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.nav_home -> true
-                R.id.nav_search -> {
-                    startActivity(Intent(this, SearchActivity::class.java))
-                    true
-                }
-                R.id.nav_portfolio -> {
-                    startActivity(Intent(this, PortfolioActivity::class.java))
-                    true
-                }
-                R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+        // Connect bottom nav to nav controller
+        binding.bottomNav.setupWithNavController(navController)
 
-// Top bar actions (menu click)
-        topAppBar.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.action_account -> {
-                    startActivity(Intent(this, AccountActivity::class.java))
-                    true
-                }
-                else -> false
-            }
-        }
+        // Toolbar setup (optional)
+        setSupportActionBar(binding.topAppBar)
+        setupActionBarWithNavController(navController, binding.drawerLayout)
 
-        /*
-        //TEST CRASH CODE — COMMENTED OUT
-        val crashButton = findViewById<Button>(R.id.testCrashButton)
-        crashButton.setOnClickListener {
-            throw RuntimeException("Test Crash from XML button!")
-        }
-        */
+        // Drawer navigation
+        binding.sideNavView.setupWithNavController(navController)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(binding.drawerLayout) || super.onSupportNavigateUp()
     }
 }

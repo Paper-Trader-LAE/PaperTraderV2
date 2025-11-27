@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#0D1B2A"
+    android:padding="20dp">
+
+    <!-- PORTFOLIO CARD -->
+    <LinearLayout
+        android:id="@+id/portfolioCard"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:orientation="vertical"
+        android:background="#16233A"
+        android:padding="16dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
+
+        <TextView
+            android:id="@+id/portfolioBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0.00"
+            android:textColor="#FFFFFF"
+            android:textSize="28sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/portfolioGrowth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+0.00% Today"
+            android:textColor="#00C896"
+            android:textSize="14sp"
+            android:paddingTop="4dp" />
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/portfolioChart"
+            android:layout_width="346dp"
+            android:layout_height="66dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+    </LinearLayout>
+
+    <!-- TAB SWITCHER -->
+    <LinearLayout
+        android:id="@+id/tabSwitcher"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/tabYourStocks"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:backgroundTint="#00C896"
+            android:text="Your Stocks"
+            android:textColor="#0D1B2A" />
+
+        <Button
+            android:id="@+id/tabWatchlist"
+            android:layout_width="0dp"
+            android:layout_height="45dp"
+            android:layout_weight="1"
+            android:backgroundTint="#1B1B1B"
+            android:text="Watchlist"
+            android:textColor="#FFFFFF" />
+    </LinearLayout>
+
+    <!-- STOCK LIST -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/stocksRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="396dp"
+        android:layout_marginTop="12dp" />
+
+
+</LinearLayout>
