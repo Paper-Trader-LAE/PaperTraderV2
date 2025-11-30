@@ -1,9 +1,20 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.kotlin.kapt")
+    id("kotlin-kapt")
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
 }
+
+val localProps = Properties()
+val localFile = rootProject.file("local.properties")
+if (localFile.exists()) {
+    localProps.load(localFile.inputStream())
+}
+val twelveKey: String = localProps.getProperty("TWELVE_DATA_API_KEY") ?: ""
 
 android {
     namespace = "com.example.papertraderv2"
@@ -20,11 +31,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField(
-            "String",
-            "TWELVE_API_KEY",
-            "\"${project.properties["TWELVE_DATA_API_KEY"]}\""
-        )
+        buildConfigField("String", "TWELVE_API_KEY", "\"$twelveKey\"")
     }
 
     buildTypes {
@@ -78,4 +85,8 @@ dependencies {
 
     //Chart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
 }

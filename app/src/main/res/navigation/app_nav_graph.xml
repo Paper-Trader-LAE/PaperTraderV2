@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:startDestination="@id/nav_home">
 
     <fragment
@@ -24,7 +25,7 @@
         android:label="Forum" />
 
     <fragment
-        android:id="@+id/nav_trade"
+        android:id="@+id/tradeFragment"
         android:name="com.example.papertraderv2.ui.TradeFragment"
         android:label="Trade" />
 
@@ -36,7 +37,23 @@
     <fragment
         android:id="@+id/tickerDetailsFragment"
         android:name="com.example.papertraderv2.ui.TickerDetailsFragment"
+        android:launchMode="singleTop"
         android:label="Details" >
     </fragment>
+
+    <fragment
+        android:id="@+id/createPostFragment"
+        android:name="com.example.papertraderv2.ui.CreatePostFragment"
+        android:label="New Post" />
+
+    <fragment
+        android:id="@+id/commentsFragment"
+        android:name="com.example.papertraderv2.ui.CommentsFragment"
+        android:label="Comments" />
+
+    <fragment
+        android:id="@+id/moduleDetailFragment"
+        android:name="com.example.papertraderv2.ui.ModuleDetailFragment"
+        android:label="Module Detail" />
 
 </navigation>

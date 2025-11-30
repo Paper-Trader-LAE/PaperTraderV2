@@ -15,35 +15,29 @@ class ModuleAdapter(
     private val onClick: (Module) -> Unit
 ) : RecyclerView.Adapter<ModuleAdapter.ModuleViewHolder>() {
 
-    // ----- ViewHolder -----
-    class ModuleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val thumbnail: ImageView = itemView.findViewById(R.id.moduleThumbnail)
-        val title: TextView = itemView.findViewById(R.id.moduleTitle)
-        val description: TextView = itemView.findViewById(R.id.moduleDescription)
-        val progress: ProgressBar = itemView.findViewById(R.id.moduleProgress)
+    class ModuleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val thumbnail: ImageView = view.findViewById(R.id.moduleThumbnail)
+        val title: TextView = view.findViewById(R.id.moduleTitle)
+        val description: TextView = view.findViewById(R.id.moduleDescription)
+        val progressBar: ProgressBar = view.findViewById(R.id.moduleProgress)
     }
 
-    // ----- Create ViewHolder -----
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModuleViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_module, parent, false)
         return ModuleViewHolder(view)
     }
 
-    // ----- Bind Data -----
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
         val module = modules[position]
 
         holder.thumbnail.setImageResource(module.thumbnailRes)
         holder.title.text = module.title
         holder.description.text = module.description
-        holder.progress.progress = module.progress
+        holder.progressBar.progress = module.progress
 
-        holder.itemView.setOnClickListener {
-            onClick(module)
-        }
+        holder.itemView.setOnClickListener { onClick(module) }
     }
 
-    // ----- Item Count -----
-    override fun getItemCount(): Int = modules.size
+    override fun getItemCount() = modules.size
 }

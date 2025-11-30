@@ -1,5 +1,5 @@
-package com.example.papertraderv2
+package com.example.papertraderv2.models
 
 data class PriceResponse(
-    val price: String
+    val price: String?
 )
