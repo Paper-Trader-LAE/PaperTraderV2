@@ -6,38 +6,56 @@
     android:padding="20dp">
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/moduleTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Module Title"
-            android:textColor="#FFFFFF"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:textColor="#FFFFFF"
+            android:paddingBottom="8dp" />
 
         <TextView
             android:id="@+id/moduleDescription"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Module description goes here..."
-            android:textColor="#B0B0B0"
+            android:text="Module Subtitle"
             android:textSize="16sp"
-            android:layout_marginBottom="20dp" />
+            android:textColor="#A0A0A0"
+            android:paddingBottom="20dp" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/progress_bar"
+            android:paddingBottom="20dp" />
+
+        <TextView
+            android:id="@+id/moduleContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Long formatted lesson text goes here..."
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:lineSpacingExtra="6dp" />
 
         <Button
             android:id="@+id/btnMarkComplete"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="Mark Complete"
-            android:backgroundTint="#00C896"
+            android:textStyle="bold"
             android:textColor="#0D1B2A"
-            android:textStyle="bold" />
-
+            android:backgroundTint="#00C896"
+            android:layout_marginTop="28dp" />
     </LinearLayout>
-
 </ScrollView>

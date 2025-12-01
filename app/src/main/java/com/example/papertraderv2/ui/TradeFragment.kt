@@ -1,11 +1,18 @@
 package com.example.papertraderv2.ui
 
 import android.os.Bundle
-import android.view.*
-import android.widget.Toast
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import com.example.papertraderv2.databinding.FragmentTradeBinding
+import com.example.papertraderv2.BuildConfig
+import com.example.papertraderv2.RetrofitClient
 import com.example.papertraderv2.data.AppDatabase
+import com.example.papertraderv2.databinding.FragmentTradeBinding
 import com.example.papertraderv2.models.Trade
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,9 +23,13 @@ class TradeFragment : Fragment() {
     private var _binding: FragmentTradeBinding? = null
     private val binding get() = _binding!!
 
-    private var symbol: String = ""
-    private var action: String = ""
-    private var livePrice: Double = 0.0
+    private var selectedCategory = "Stocks"
+    private var selectedSymbol = ""
+    private var livePrice = 0.0
+
+    private val stocks = listOf("AAPL", "MSFT", "TSLA", "AMZN")
+    private val forex = listOf("EURUSD", "GBPUSD", "USDJPY", "AUDUSD")
+    private val crypto = listOf("BTCUSD", "ETHUSD", "ADAUSD", "XRPUSD")
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,48 +42,146 @@ class TradeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        symbol = arguments?.getString("symbol") ?: ""
-        action = arguments?.getString("action") ?: ""
+        setupCategorySpinner()
+        setupSymbolSpinner()
 
-        binding.tradeSymbol.text = "$action $symbol"
+        binding.inputQuantity.addTextChangedListener(quantityWatcher)
 
-        // Passed price from ticker page? (Optional)
-        livePrice = arguments?.getDouble("livePrice") ?: 0.0
-        if (livePrice > 0) {
-            binding.tradePrice.text = "$${"%.4f".format(livePrice)}"
+        binding.btnBuy.setOnClickListener { submitTrade("Buy") }
+        binding.btnSell.setOnClickListener { submitTrade("Sell") }
+    }
+
+    // -------------------------
+    // CATEGORY SPINNER
+    // -------------------------
+    private fun setupCategorySpinner() {
+        val items = listOf("Stocks", "Forex", "Crypto")
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            items
+        )
+
+        binding.spinnerCategory.adapter = adapter
+
+        binding.spinnerCategory.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedCategory = items[position]
+                    updateSymbolSpinner()
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+    }
+
+    // -------------------------
+    // SYMBOL SPINNER
+    // -------------------------
+    private fun updateSymbolSpinner() {
+        val list = when (selectedCategory) {
+            "Stocks" -> stocks
+            "Forex" -> forex
+            "Crypto" -> crypto
+            else -> stocks
         }
 
-        binding.tradeConfirmBtn.setOnClickListener {
-            executeTrade()
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            list
+        )
+
+        binding.spinnerSymbol.adapter = adapter
+
+        binding.spinnerSymbol.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    selectedSymbol = list[position]
+                    fetchLivePrice(selectedSymbol)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
+    }
+
+    private fun setupSymbolSpinner() {
+        updateSymbolSpinner()
+    }
+
+    // -------------------------
+    // LIVE PRICE API CALL
+    // -------------------------
+    private fun fetchLivePrice(symbol: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.api.getTimeSeries(
+                    symbol = symbol,
+                    interval = "1min",
+                    outputSize = 1,
+                    apiKey = BuildConfig.TWELVE_API_KEY
+                )
+
+                val latest = response.values?.firstOrNull()
+                livePrice = latest?.close?.toDoubleOrNull() ?: 0.0
+
+                requireActivity().runOnUiThread {
+                    binding.textLivePrice.text = "$${"%.4f".format(livePrice)}"
+                    updateEstimatedCost()
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
-    private fun executeTrade() {
-        val qty = binding.tradeQuantity.text.toString().toDoubleOrNull()
-
-        if (qty == null || qty <= 0) {
-            Toast.makeText(requireContext(), "Enter a valid quantity", Toast.LENGTH_SHORT).show()
-            return
+    // -------------------------
+    // QUANTITY LISTENER
+    // -------------------------
+    private val quantityWatcher = object : TextWatcher {
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            updateEstimatedCost()
         }
+        override fun afterTextChanged(s: Editable?) {}
+    }
 
-        val total = livePrice * qty
+    private fun updateEstimatedCost() {
+        val qty = binding.inputQuantity.text.toString().toDoubleOrNull() ?: 0.0
+        val total = qty * livePrice
+
+        binding.textEstimated.text = "Estimated: $${"%.2f".format(total)}"
+    }
+
+    // -------------------------
+    // SUBMIT TRADE
+    // -------------------------
+    private fun submitTrade(action: String) {
+        val qty = binding.inputQuantity.text.toString().toDoubleOrNull() ?: return
 
         val trade = Trade(
-            symbol = symbol,
+            id = 0,
+            symbol = selectedSymbol,
             action = action,
             quantity = qty,
             price = livePrice,
-            total = total
+            total = qty * livePrice
         )
 
         CoroutineScope(Dispatchers.IO).launch {
-            AppDatabase.getDatabase(requireContext())
-                .tradeDao()
-                .insertTrade(trade)
-
-            requireActivity().runOnUiThread {
-                Toast.makeText(requireContext(), "$action Complete!", Toast.LENGTH_SHORT).show()
-            }
+            AppDatabase.getDatabase(requireContext()).tradeDao().insertTrade(trade)
         }
     }
 

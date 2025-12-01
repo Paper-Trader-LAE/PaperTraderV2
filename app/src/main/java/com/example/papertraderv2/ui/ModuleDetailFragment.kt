@@ -16,8 +16,7 @@ class ModuleDetailFragment : Fragment() {
     private var key: String = ""
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentModuleDetailBinding.inflate(inflater, container, false)
         return binding.root
@@ -27,13 +26,21 @@ class ModuleDetailFragment : Fragment() {
 
         val title = arguments?.getString("title") ?: ""
         val desc = arguments?.getString("desc") ?: ""
+        val content = arguments?.getString("content") ?: ""
         key = arguments?.getString("key") ?: ""
 
         binding.moduleTitle.text = title
         binding.moduleDescription.text = desc
+        binding.moduleContent.text = content
+
+        // Load progress
+        val progress = ProgressRepository.getProgress(requireContext(), key)
+        binding.progressBar.progress = progress
 
         binding.btnMarkComplete.setOnClickListener {
             ProgressRepository.setProgress(requireContext(), key, 100)
+            binding.progressBar.progress = 100
+            requireActivity().onBackPressedDispatcher.onBackPressed()
         }
     }
 

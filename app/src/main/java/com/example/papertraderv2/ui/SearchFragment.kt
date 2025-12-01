@@ -1,197 +1,134 @@
-// com/example/papertraderv2/ui/SearchFragment.kt
 package com.example.papertraderv2.ui
 
-import android.content.Context
 import android.os.Bundle
-import android.view.*
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.papertraderv2.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.papertraderv2.BuildConfig
+import com.example.papertraderv2.RetrofitClient
+import com.example.papertraderv2.adapters.SearchAdapter
+import com.example.papertraderv2.databinding.FragmentSearchBinding
+import com.example.papertraderv2.models.Stock
 import com.example.papertraderv2.utils.SymbolMapper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class SearchFragment : Fragment() {
 
-    data class SearchItem(
-        val label: String,   // what user sees
-        val symbol: String   // what API needs
-    )
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var searchInput: EditText
-    private lateinit var recentContainer: LinearLayout
-    private lateinit var categoriesContainer: LinearLayout
-
-    private val maxRecent = 5
-    private val prefsName = "search_preferences"
-    private val recentKey = "recent_searches"
-
-    private val categories: Map<String, List<SearchItem>> = mapOf(
-        "Indices" to listOf(
-            SearchItem("S&P 500", "SPX"),
-            SearchItem("Dow Jones", "DJI"),
-            SearchItem("Nasdaq 100", "NDX")
-        ),
-        "Forex Pairs" to listOf(
-            SearchItem("EUR/USD", "EURUSD"),
-            SearchItem("GBP/USD", "GBPUSD"),
-            SearchItem("USD/JPY", "USDJPY")
-        ),
-        "Companies" to listOf(
-            SearchItem("Apple", "AAPL"),
-            SearchItem("Tesla", "TSLA"),
-            SearchItem("Amazon", "AMZN")
-        ),
-        "Crypto" to listOf(
-            SearchItem("Bitcoin", "BTCUSD"),
-            SearchItem("Ethereum", "ETHUSD"),
-            SearchItem("Solana", "SOLUSD")
-        ),
-        "Oils / Commodities" to listOf(
-            SearchItem("Brent Oil", "BRENT"),
-            SearchItem("Gold", "XAUUSD"),
-            SearchItem("Silver", "XAGUSD")
-        )
-    )
+    private lateinit var adapter: SearchAdapter
+    private val results = mutableListOf<Stock>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        val view = inflater.inflate(R.layout.fragment_search, container, false)
+        binding.searchRecycler.layoutManager = LinearLayoutManager(requireContext())
 
-        searchInput = view.findViewById(R.id.searchInput)
-        recentContainer = view.findViewById(R.id.recentContainer)
-        categoriesContainer = view.findViewById(R.id.categoriesContainer)
+        adapter = SearchAdapter(results) { stock ->
+            val bundle = Bundle().apply {
+                putString("symbol", stock.symbol)
+                putString("displayName", stock.name)
+            }
+            findNavController().navigate(
+                com.example.papertraderv2.R.id.tickerDetailsFragment,
+                bundle
+            )
+        }
 
-        setupCategories()
-        loadRecentSearches()
+        binding.searchRecycler.adapter = adapter
 
-        searchInput.setOnEditorActionListener { _, _, _ ->
-            val text = searchInput.text.toString().trim()
-            if (text.isNotBlank()) {
-                handleSearchText(text)
+        setupSearchBox()
+
+        return binding.root
+    }
+
+    private fun setupSearchBox() {
+        binding.searchInput.setOnEditorActionListener { v, _, _ ->
+            val rawQuery = v.text.toString().trim()
+            if (rawQuery.isNotEmpty()) {
+                val cleaned = normalizeQuery(rawQuery)
+                searchSymbol(cleaned, rawQuery)
             }
             true
         }
-
-        return view
     }
 
-    // ---------------- HANDLE FREE TEXT ----------------
-    private fun handleSearchText(text: String) {
-        val normalized = text.trim()
+    // ---------------------------------------------------------
+    // NORMALIZE SEARCH → "eur/usd" → "EURUSD", "bitcoin" → "BTCUSD"
+    // ---------------------------------------------------------
+    private fun normalizeQuery(query: String): String {
+        val mapped = SymbolMapper.toSymbol(query)
+        return mapped.uppercase()
+    }
 
-        // 1) Try match against known category labels or symbols
-        val flatList = categories.values.flatten()
-        val match = flatList.find {
-            it.label.equals(normalized, ignoreCase = true) ||
-                    it.symbol.equals(
-                        normalized.replace(" ", "").replace("/", ""),
-                        ignoreCase = true
+    // ---------------------------------------------------------
+    // SEARCH SYMBOL USING 12DATA API
+    // ---------------------------------------------------------
+    private fun searchSymbol(symbol: String, displayName: String) {
+        results.clear()
+        adapter.notifyDataSetChanged()
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = RetrofitClient.api.getTimeSeries(
+                    symbol = symbol,
+                    interval = "1min",
+                    outputSize = 1,
+                    apiKey = BuildConfig.TWELVE_API_KEY
+                )
+
+                val latest = response.values?.firstOrNull()
+
+                if (latest != null) {
+                    val price = latest.close.toDoubleOrNull() ?: 0.0
+
+                    val stock = Stock(
+                        name = displayName.uppercase(),
+                        symbol = symbol.uppercase(),
+                        price = price
                     )
-        }
 
-        val item = if (match != null) {
-            println("🔎 Search match → label='${match.label}', symbol='${match.symbol}'")
-            match
-        } else {
-            // 2) Use SymbolMapper to guess the API symbol
-            val mappedSymbol = SymbolMapper.toSymbol(normalized)
-            println("🔎 Search free text → '$normalized' mapped to symbol '$mappedSymbol'")
-            SearchItem(
-                label = normalized,
-                symbol = mappedSymbol
+                    requireActivity().runOnUiThread {
+                        results.add(stock)
+                        adapter.notifyDataSetChanged()
+                    }
+                } else {
+                    showNotFound(displayName)
+                }
+
+            } catch (e: Exception) {
+                e.printStackTrace()
+                showNotFound(displayName)
+            }
+        }
+    }
+
+    private fun showNotFound(query: String) {
+        requireActivity().runOnUiThread {
+            results.clear()
+            results.add(
+                Stock(
+                    name = "Not Found",
+                    symbol = query.uppercase(),
+                    price = 0.0
+                )
             )
-        }
-
-        saveRecentSearch(item.label)
-        openTicker(item)
-    }
-
-    // ---------------- CATEGORIES ----------------
-    private fun setupCategories() {
-        categories.forEach { (title, items) ->
-
-            val categoryTitle = TextView(requireContext()).apply {
-                text = title
-                setTextColor(resources.getColor(android.R.color.white))
-                textSize = 17f
-                setPadding(0, 20, 0, 12)
-            }
-
-            categoriesContainer.addView(categoryTitle)
-
-            items.forEach { item ->
-                val itemBtn = createItemButton(item.label)
-                itemBtn.setOnClickListener { openTicker(item) }
-                categoriesContainer.addView(itemBtn)
-            }
+            adapter.notifyDataSetChanged()
         }
     }
 
-    // ---------------- RECENT SEARCHES ----------------
-    private fun saveRecentSearch(search: String) {
-        val prefs = requireContext().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-        val list = prefs.getStringSet(recentKey, LinkedHashSet())!!.toMutableList()
-
-        list.remove(search)
-        list.add(0, search)
-
-        val trimmed = list.take(maxRecent).toSet()
-        prefs.edit().putStringSet(recentKey, trimmed).apply()
-
-        loadRecentSearches()
-    }
-
-    private fun loadRecentSearches() {
-        recentContainer.removeAllViews()
-
-        val prefs = requireContext().getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-        val list = prefs.getStringSet(recentKey, emptySet())!!.toList()
-
-        list.forEach { label ->
-            val btn = createItemButton(label)
-            btn.setOnClickListener {
-                handleSearchText(label)
-            }
-            recentContainer.addView(btn)
-        }
-    }
-
-    // ---------------- BUTTON STYLE ----------------
-    private fun createItemButton(text: String): Button {
-        return Button(requireContext()).apply {
-            this.text = text
-            setBackgroundColor(0xFF1B1B1B.toInt())
-            setTextColor(0xFFFFFFFF.toInt())
-            textSize = 15f
-            setPadding(25, 20, 25, 20)
-
-            val params = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            params.setMargins(0, 10, 0, 0)
-            layoutParams = params
-        }
-    }
-
-    // ---------------- NAVIGATION ----------------
-    private fun openTicker(item: SearchItem) {
-        val bundle = Bundle().apply {
-            putString("displayName", item.label)
-            putString("symbol", item.symbol)
-        }
-
-        findNavController().navigate(
-            R.id.tickerDetailsFragment,
-            bundle,
-            androidx.navigation.NavOptions.Builder()
-                .setLaunchSingleTop(true)
-                .setPopUpTo(R.id.tickerDetailsFragment, true)
-                .build()
-        )
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

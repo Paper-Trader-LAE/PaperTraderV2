@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dp"
@@ -29,16 +30,44 @@
             android:text="AAPL"
             android:textColor="#A0B0C0"
             android:textSize="14sp" />
+
+        <!-- optional line to show quantity if present -->
+        <TextView
+            android:id="@+id/stockQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.0 units"
+            android:textColor="#C0CADA"
+            android:textSize="12sp"
+            android:visibility="gone"
+            android:layout_marginTop="2dp" />
     </LinearLayout>
 
     <!-- PRICE -->
-    <TextView
-        android:id="@+id/stockPrice"
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center_vertical"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$0.00"
-        android:textColor="#00C896"
-        android:textSize="16sp"
-        android:layout_gravity="center_vertical" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/stockPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="$0.00"
+            android:textColor="#00C896"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical" />
+
+        <!-- remove / close button -->
+        <TextView
+            android:id="@+id/stockRemove"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove"
+            android:textColor="#FF6B6B"
+            android:textSize="12sp"
+            android:paddingTop="4dp" />
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,19 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D1B2A"
     android:orientation="vertical"
+    android:background="#0D1B2A"
     android:padding="16dp">
-
-    <TextView
-        android:id="@+id/learnHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Learning Modules"
-        android:textColor="#FFFFFF"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="12dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/modulesRecycler"
