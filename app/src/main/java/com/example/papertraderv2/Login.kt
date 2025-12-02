@@ -19,7 +19,7 @@ class Login : AppCompatActivity() {
         val loginBtn = findViewById<Button>(R.id.loginBtn)
         val toSignup = findViewById<TextView>(R.id.toSignup)
 
-        // 🔥 TEMP: BYPASS FIREBASE AND GO STRAIGHT TO MAIN
+        // TEMP: BYPASS FIREBASE AND GO STRAIGHT TO MAIN
         loginBtn.setOnClickListener {
             if (email.text.toString().isEmpty() || password.text.toString().isEmpty()) {
                 Toast.makeText(this, "Fill in all fields first", Toast.LENGTH_SHORT).show()

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.papertraderv2.BuildConfig
 import com.example.papertraderv2.RetrofitClient
@@ -182,6 +183,16 @@ class TradeFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             AppDatabase.getDatabase(requireContext()).tradeDao().insertTrade(trade)
+
+            requireActivity().runOnUiThread {
+                Toast.makeText(requireContext(), "Trade placed!", Toast.LENGTH_SHORT).show()
+
+                // Notify HomeFragment to reload
+                parentFragmentManager.setFragmentResult("trade_made", Bundle())
+
+                // Go back
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
