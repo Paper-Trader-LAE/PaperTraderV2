@@ -1,19 +1,19 @@
 package com.example.papertraderv2.ui
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.papertraderv2.BuildConfig
+import com.example.papertraderv2.HomeFilterAdapter
 import com.example.papertraderv2.R
 import com.example.papertraderv2.RetrofitClient
+import com.example.papertraderv2.TradeHistoryAdapter
 import com.example.papertraderv2.adapters.StockAdapter
 import com.example.papertraderv2.data.AppDatabase
 import com.example.papertraderv2.models.Stock
@@ -30,20 +30,28 @@ import kotlin.math.abs
 class HomeFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
-    private lateinit var adapter: StockAdapter
-
     private lateinit var portfolioBalanceText: TextView
     private lateinit var portfolioGrowthText: TextView
     private lateinit var chart: LineChart
 
-    private val yourStocks = mutableListOf<Stock>()
+    // NEW: filter selector recycler
+    private lateinit var filterRecycler: RecyclerView
+    private lateinit var filterAdapter: HomeFilterAdapter
 
+    // Existing lists
+    private val yourStocks = mutableListOf<Stock>()
     private val watchlist = mutableListOf(
         Stock("Bitcoin", "BTCUSD", 0.0),
         Stock("S&P 500", "SPX", 0.0)
     )
 
-    private var showingYourStocks = true
+    // NEW: selector options
+    private val filters = listOf("Your Trades", "Watchlist", "View Past Trades")
+    private var selectedFilterIndex = 0
+    private var showingPastTrades = false
+
+    // Adapter used for trades/watchlist list
+    private lateinit var stockAdapter: StockAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,90 +59,105 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
         view.setBackgroundColor(Color.parseColor("#0D1B2A"))
 
         portfolioBalanceText = view.findViewById(R.id.portfolioBalance)
         portfolioGrowthText = view.findViewById(R.id.portfolioGrowth)
         chart = view.findViewById(R.id.portfolioChart)
 
+        // Content list (under selector)
         recyclerView = view.findViewById(R.id.stocksRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = StockAdapter(
-            yourStocks,
-            onClick = {},
-            onRemove = { stock -> closePosition(stock) }
-        )
-        recyclerView.adapter = adapter
+        // Selector list (Your Trades / Watchlist / Past Trades)
+        filterRecycler = view.findViewById(R.id.homeFilterRecycler)
+        filterRecycler.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
-        // FIRST LOAD
-        loadUserPortfolio {
-            fetchLivePrices(yourStocks) {
-                updatePortfolioUI()
-            }
+        filterAdapter = HomeFilterAdapter(filters, selectedFilterIndex) { index ->
+            selectedFilterIndex = index
+            switchList(index)
         }
+        filterRecycler.adapter = filterAdapter
 
-        setupTabs(view)
         setupEmptyChart()
+
+        // Default selection
+        switchList(0)
 
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        // 🔥 FIXED: This was below return (never executed)
+        // When a trade is made, refresh current selection
         parentFragmentManager.setFragmentResultListener("trade_made", this) { _, _ ->
-            loadUserPortfolio {
-                fetchLivePrices(yourStocks) {
-                    adapter.notifyDataSetChanged()
-                    updatePortfolioUI()
+            when (selectedFilterIndex) {
+                0 -> loadUserPortfolio {
+                    fetchLivePrices(yourStocks) { updatePortfolioUI() }
                 }
+                1 -> fetchLivePrices(watchlist)
+                2 -> loadPastTrades()
             }
         }
     }
 
     // -------------------------------------------------------------------
-    // TABS
+    // SWITCH LIST UNDER SELECTOR
     // -------------------------------------------------------------------
-    private fun setupTabs(view: View) {
-        val tabYour = view.findViewById<Button>(R.id.tabYourStocks)
-        val tabWatch = view.findViewById<Button>(R.id.tabWatchlist)
+    private fun switchList(index: Int) {
+        when (index) {
+            0 -> { // Your Trades (open positions)
+                showingPastTrades = false
 
-        tabYour.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00C896"))
-        tabWatch.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1B1B1B"))
+                stockAdapter = StockAdapter(
+                    yourStocks,
+                    onClick = {},
+                    onRemove = { stock -> closePosition(stock) }
+                )
+                recyclerView.adapter = stockAdapter
 
-        tabYour.setOnClickListener {
-            showingYourStocks = true
-            tabYour.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00C896"))
-            tabWatch.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1B1B1B"))
+                loadUserPortfolio {
+                    fetchLivePrices(yourStocks) { updatePortfolioUI() }
+                }
+            }
 
-            adapter = StockAdapter(
-                yourStocks,
-                onClick = {},
-                onRemove = { stock -> closePosition(stock) }
-            )
-            recyclerView.adapter = adapter
-            updatePortfolioUI()
-        }
+            1 -> { // Watchlist
+                showingPastTrades = false
 
-        tabWatch.setOnClickListener {
-            showingYourStocks = false
-            tabWatch.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#00C896"))
-            tabYour.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#1B1B1B"))
+                stockAdapter = StockAdapter(
+                    watchlist,
+                    onClick = {},
+                    onRemove = { stock -> removeFromWatchlist(stock) }
+                )
+                recyclerView.adapter = stockAdapter
 
-            adapter = StockAdapter(
-                watchlist,
-                onClick = {},
-                onRemove = { stock -> removeFromWatchlist(stock) }
-            )
-            recyclerView.adapter = adapter
+                fetchLivePrices(watchlist)
+            }
 
-            fetchLivePrices(watchlist)
+            2 -> { // Past Trades
+                showingPastTrades = true
+                loadPastTrades()
+            }
         }
     }
 
     // -------------------------------------------------------------------
-    // LOAD PORTFOLIO FROM ROOM
+    // LOAD PAST TRADES LIST (Room)
+    // -------------------------------------------------------------------
+    private fun loadPastTrades() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val trades = AppDatabase.getDatabase(requireContext())
+                .tradeDao()
+                .getAllTrades()
+
+            requireActivity().runOnUiThread {
+                recyclerView.adapter = TradeHistoryAdapter(trades)
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------
+    // LOAD PORTFOLIO FROM ROOM (open positions)
     // -------------------------------------------------------------------
     private fun loadUserPortfolio(onLoaded: () -> Unit = {}) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -164,7 +187,12 @@ class HomeFragment : Fragment() {
             requireActivity().runOnUiThread {
                 yourStocks.clear()
                 yourStocks.addAll(portfolio)
-                if (showingYourStocks) adapter.notifyDataSetChanged()
+
+                // Only refresh list if we're currently on "Your Trades"
+                if (!showingPastTrades && selectedFilterIndex == 0 && ::stockAdapter.isInitialized) {
+                    stockAdapter.notifyDataSetChanged()
+                }
+
                 updatePortfolioUI()
                 onLoaded()
             }
@@ -178,7 +206,6 @@ class HomeFragment : Fragment() {
         stocks: MutableList<Stock>,
         onComplete: () -> Unit = {}
     ) {
-
         CoroutineScope(Dispatchers.IO).launch {
 
             val fresh = stocks.map { s ->
@@ -199,9 +226,12 @@ class HomeFragment : Fragment() {
             requireActivity().runOnUiThread {
                 stocks.clear()
                 stocks.addAll(fresh)
-                adapter.notifyDataSetChanged()
 
-                if (showingYourStocks && stocks === yourStocks) {
+                if (!showingPastTrades && ::stockAdapter.isInitialized) {
+                    stockAdapter.notifyDataSetChanged()
+                }
+
+                if (selectedFilterIndex == 0 && stocks === yourStocks) {
                     updatePortfolioUI()
                 }
 
@@ -211,18 +241,20 @@ class HomeFragment : Fragment() {
     }
 
     // -------------------------------------------------------------------
-    // REMOVE WATCHLIST ITEM (FIXED)
+    // REMOVE WATCHLIST ITEM
     // -------------------------------------------------------------------
     private fun removeFromWatchlist(stock: Stock) {
         val index = watchlist.indexOfFirst { it.symbol == stock.symbol }
         if (index != -1) {
             watchlist.removeAt(index)
-            adapter.notifyDataSetChanged()
+            if (!showingPastTrades && selectedFilterIndex == 1 && ::stockAdapter.isInitialized) {
+                stockAdapter.notifyDataSetChanged()
+            }
         }
     }
 
     // -------------------------------------------------------------------
-    // CLOSE POSITION
+    // CLOSE POSITION (creates opposite trade)
     // -------------------------------------------------------------------
     private fun closePosition(stock: Stock) {
         val qty = stock.quantity
@@ -243,11 +275,12 @@ class HomeFragment : Fragment() {
                 .tradeDao()
                 .insertTrade(trade)
 
-            loadUserPortfolio {
-                fetchLivePrices(yourStocks) {
-                    adapter.notifyDataSetChanged()
-                    updatePortfolioUI()
+            // After closing, refresh current view
+            when (selectedFilterIndex) {
+                0 -> loadUserPortfolio {
+                    fetchLivePrices(yourStocks) { updatePortfolioUI() }
                 }
+                2 -> loadPastTrades()
             }
         }
     }
