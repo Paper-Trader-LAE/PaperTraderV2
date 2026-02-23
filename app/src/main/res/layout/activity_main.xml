@@ -24,9 +24,9 @@
                 android:background="#151515"
                 app:title=""
                 app:navigationIcon="@drawable/ic_menu"
-                app:menu="@menu/top_app_bar_menu"
                 app:navigationIconTint="@android:color/white"
                 app:itemIconTint="@android:color/white" />
+            <!-- app:menu="@menu/top_app_bar_menu" -->
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- NAV HOST FRAGMENT (no manual 60dp margin) -->
