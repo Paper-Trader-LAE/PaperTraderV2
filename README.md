@@ -147,12 +147,12 @@ Future scope includes expanding to iOS, adding gamification (leaderboards, chall
 
 [Add screenshot of your Project Board with three milestones visible in
 this section]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+<img src="Milestones.png" width=600>
 
 ## Issue cards
 
 - [Add screenshot of your Project Board with the issues that you've been working on for this unit's milestone] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
-- [Add screenshot of your Project Board with the issues that you're working on in the **NEXT sprint**. It should include issues for next unit with assigned owners.] <img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+- [Add screenshot of your Project Board with the issues that you're working on in the **NEXT sprint**. It should include issues for next unit with assigned owners.] <img src="ProjectBoard.png" width=600>
 
 ## Issues worked on this sprint
 
@@ -174,7 +174,12 @@ this section]
 from the original requirements
 
 [Add video/gif of your current application that shows build progress]
-<img src="YOUR_WIREFRAME_IMAGE_URL" width=600>
+![MyGif](./Login.gif)
+![MyGif](./Home.gif)
+![MyGif](./Search.gif)
+![MyGif](./Modules.gif)
+![MyGif](./Trade.gif)
+![MyGif](./Forum.gif)
 
 ## App Demo Video
 
