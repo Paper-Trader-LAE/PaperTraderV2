@@ -1,135 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D1B2A"
-    android:padding="20dp">
+    android:background="#2F2F2F"
+    android:paddingStart="12dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="12dp"
+    android:paddingBottom="86dp">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/topSearchBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:background="#5A5A5A"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
-            android:id="@+id/tradeHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Trade"
-            android:textColor="#FFFFFF"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:paddingBottom="20dp" />
-
-        <!-- CATEGORY LABEL -->
-        <TextView
-            android:id="@+id/categoryLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Category"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp" />
-
-        <!-- CATEGORY SPINNER -->
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="#2c5784"
-            android:padding="8dp"
-            android:spinnerMode="dropdown" />
-
-        <!-- SYMBOL LABEL -->
-        <TextView
-            android:id="@+id/symbolLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Symbol"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp" />
-
-        <!-- SYMBOL SPINNER -->
-        <Spinner
-            android:id="@+id/spinnerSymbol"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="#2c5784"
-            android:padding="8dp"
-            android:spinnerMode="dropdown" />
-
-        <!-- LIVE PRICE LABEL -->
-        <TextView
-            android:id="@+id/textLivePriceLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Live Price"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp" />
-
-        <!-- LIVE PRICE -->
-        <TextView
-            android:id="@+id/textLivePrice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="$0.00"
-            android:textColor="#00C896"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:paddingTop="6dp" />
-
-        <!-- QUANTITY LABEL -->
-        <TextView
-            android:id="@+id/quantityLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quantity"
-            android:textColor="#FFFFFF"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp" />
-
-        <EditText
-            android:id="@+id/inputQuantity"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:hint="Enter amount"
-            android:textColor="#FFFFFF"
-            android:textColorHint="#777777"
-            android:background="@android:color/transparent"
-            android:padding="12dp"
-            android:inputType="numberDecimal" />
-
-        <!-- ESTIMATED COST -->
-        <TextView
-            android:id="@+id/textEstimated"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Estimated: $0.00"
+            android:id="@+id/currentSymbolText"
+            android:layout_width="100dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="SPX"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            android:layout_marginTop="12dp" />
-
-        <!-- BUY BUTTON -->
-        <Button
-            android:id="@+id/btnBuy"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="BUY"
             android:textStyle="bold"
-            android:textColor="#0D0D0D"
-            android:backgroundTint="#00C896"
-            android:layout_marginTop="25dp" />
+            android:background="@drawable/bg_trade_field" />
 
-        <!-- SELL BUTTON -->
-        <Button
-            android:id="@+id/btnSell"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="SELL"
-            android:textStyle="bold"
-            android:textColor="#0D0D0D"
-            android:backgroundTint="#FF5252"
-            android:layout_marginTop="12dp" />
+        <EditText
+            android:id="@+id/searchInput"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_weight="1"
+            android:layout_marginStart="10dp"
+            android:hint="Search"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#D8D8D8"
+            android:background="@drawable/bg_trade_field" />
 
+        <Spinner
+            android:id="@+id/spinnerCategory"
+            android:layout_width="130dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_trade_field"
+            android:spinnerMode="dropdown" />
     </LinearLayout>
-</ScrollView>
+
+    <TextView
+        android:id="@+id/textLivePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$0.00"
+        android:textColor="#FFFFFF"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/topSearchBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.github.mikephil.charting.charts.CandleStickChart
+        android:id="@+id/tradeCandleChart"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="18dp"
+        app:layout_constraintTop_toBottomOf="@id/textLivePrice"
+        app:layout_constraintBottom_toTopOf="@id/tradePanel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/tradePanel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#091544"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/lotSizeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lot size"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <Button
+                android:id="@+id/btnBuy"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="BUY"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:backgroundTint="#29FF00" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.25"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_lot_box"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp">
+
+                <TextView
+                    android:id="@+id/btnMinus"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/inputLotSize"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:text="0.01"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#CCCCCC"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/btnPlus"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="+"
+                    android:textColor="#FFFFFF"
+                    android:textSize="28sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnSell"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="SELL"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="16sp"
+                android:backgroundTint="#FF1A1A" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

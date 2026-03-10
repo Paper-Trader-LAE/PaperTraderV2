@@ -14,7 +14,8 @@ val localFile = rootProject.file("local.properties")
 if (localFile.exists()) {
     localProps.load(localFile.inputStream())
 }
-val twelveKey: String = localProps.getProperty("TWELVE_DATA_API_KEY") ?: ""
+val finnhubKey: String = localProps.getProperty("FINNHUB_API_KEY") ?: ""
+val alphaKey: String = localProps.getProperty("ALPHA_VANTAGE_API_KEY") ?: ""
 
 android {
     namespace = "com.example.papertraderv2"
@@ -31,7 +32,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "TWELVE_API_KEY", "\"$twelveKey\"")
+        buildConfigField("String", "FINNHUB_API_KEY", "\"$finnhubKey\"")
+        buildConfigField("String", "ALPHA_VANTAGE_API_KEY", "\"$alphaKey\"")
     }
 
     buildTypes {

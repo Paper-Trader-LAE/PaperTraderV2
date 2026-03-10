@@ -1,5 +1,6 @@
 package com.example.papertraderv2.ui
 
+
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.papertraderv2.BuildConfig
+import com.example.papertraderv2.R
 import com.example.papertraderv2.RetrofitClient
 import com.example.papertraderv2.adapters.SearchAdapter
 import com.example.papertraderv2.databinding.FragmentSearchBinding
@@ -37,16 +39,11 @@ class SearchFragment : Fragment() {
         adapter = SearchAdapter(results) { stock ->
             val bundle = Bundle().apply {
                 putString("symbol", stock.symbol)
-                putString("displayName", stock.name)
             }
-            findNavController().navigate(
-                com.example.papertraderv2.R.id.tickerDetailsFragment,
-                bundle
-            )
+            findNavController().navigate(R.id.tradeFragment, bundle)
         }
 
         binding.searchRecycler.adapter = adapter
-
         setupSearchBox()
 
         return binding.root
@@ -63,35 +60,24 @@ class SearchFragment : Fragment() {
         }
     }
 
-    // ---------------------------------------------------------
-    // NORMALIZE SEARCH → "eur/usd" → "EURUSD", "bitcoin" → "BTCUSD"
-    // ---------------------------------------------------------
     private fun normalizeQuery(query: String): String {
-        val mapped = SymbolMapper.toSymbol(query)
-        return mapped.uppercase()
+        return SymbolMapper.toSymbol(query).uppercase()
     }
 
-    // ---------------------------------------------------------
-    // SEARCH SYMBOL USING 12DATA API
-    // ---------------------------------------------------------
     private fun searchSymbol(symbol: String, displayName: String) {
         results.clear()
         adapter.notifyDataSetChanged()
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitClient.api.getTimeSeries(
+                val response = RetrofitClient.api.getQuote(
                     symbol = symbol,
-                    interval = "1min",
-                    outputSize = 1,
-                    apiKey = BuildConfig.TWELVE_API_KEY
+                    token = BuildConfig.FINNHUB_API_KEY
                 )
 
-                val latest = response.values?.firstOrNull()
+                val price = response.c ?: 0.0
 
-                if (latest != null) {
-                    val price = latest.close.toDoubleOrNull() ?: 0.0
-
+                if (price > 0.0) {
                     val stock = Stock(
                         name = displayName.uppercase(),
                         symbol = symbol.uppercase(),
@@ -105,9 +91,7 @@ class SearchFragment : Fragment() {
                 } else {
                     showNotFound(displayName)
                 }
-
             } catch (e: Exception) {
-                e.printStackTrace()
                 showNotFound(displayName)
             }
         }

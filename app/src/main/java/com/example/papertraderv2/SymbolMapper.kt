@@ -5,9 +5,9 @@ object SymbolMapper {
 
     private val map = mapOf(
         // Indices
-        "S&P 500" to "SPX",
-        "Dow Jones" to "DJI",
-        "Nasdaq 100" to "NDX",
+        "S&P 500" to "SPY",
+        "Dow Jones" to "DIA",
+        "Nasdaq 100" to "QQQ",
 
         // Forex
         "EUR/USD" to "EURUSD",

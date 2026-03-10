@@ -3,8 +3,9 @@ package com.example.papertraderv2.ui
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -34,19 +35,14 @@ class TickerDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTickerDetailsBinding.inflate(inflater, container, false)
-
-        Log.e("LAYOUT_CHECK", "Loaded Ticker Details Layout")
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         displayName = arguments?.getString("displayName") ?: ""
         symbol = arguments?.getString("symbol") ?: ""
 
-        binding.tickerTitle.text =
-            if (displayName.isNotBlank()) displayName else symbol
+        binding.tickerTitle.text = if (displayName.isNotBlank()) displayName else symbol
 
         loadPrice(symbol)
         loadCandleData(symbol)
@@ -59,28 +55,22 @@ class TickerDetailsFragment : Fragment() {
         }
     }
 
-    // ---------------- PRICE ----------------
     private fun loadPrice(symbol: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val result = RetrofitClient.api.getTimeSeries(
+                val response = RetrofitClient.api.getQuote(
                     symbol = symbol,
-                    interval = "1min",
-                    outputSize = 1,
-                    apiKey = BuildConfig.TWELVE_API_KEY
+                    token = BuildConfig.FINNHUB_API_KEY
                 )
 
-                val latest = result.values?.firstOrNull()
-                val price = latest?.close?.toDoubleOrNull()
+                val price = response.c ?: 0.0
 
                 requireActivity().runOnUiThread {
                     binding.tickerPrice.text =
-                        if (price != null) "$${"%.4f".format(price)}"
+                        if (price > 0.0) "$${"%.4f".format(price)}"
                         else "Price unavailable"
                 }
-
             } catch (e: Exception) {
-                e.printStackTrace()
                 requireActivity().runOnUiThread {
                     binding.tickerPrice.text = "Error loading price"
                 }
@@ -88,19 +78,26 @@ class TickerDetailsFragment : Fragment() {
         }
     }
 
-    // ---------------- CANDLE DATA ----------------
     private fun loadCandleData(symbol: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val response = RetrofitClient.api.getTimeSeries(
+                val to = System.currentTimeMillis() / 1000
+                val from = to - (60 * 60 * 24 * 7)
+
+                val response = RetrofitClient.api.getStockCandles(
                     symbol = symbol,
-                    interval = "1h",
-                    outputSize = 50,
-                    apiKey = BuildConfig.TWELVE_API_KEY
+                    resolution = "60",
+                    from = from,
+                    to = to,
+                    token = BuildConfig.FINNHUB_API_KEY
                 )
 
-                val values = response.values ?: emptyList()
-                if (values.isEmpty()) {
+                if (response.s != "ok" ||
+                    response.o.isNullOrEmpty() ||
+                    response.h.isNullOrEmpty() ||
+                    response.l.isNullOrEmpty() ||
+                    response.c.isNullOrEmpty()
+                ) {
                     requireActivity().runOnUiThread {
                         binding.tickerCandleChart.setNoDataText("No chart data")
                         binding.tickerCandleChart.invalidate()
@@ -109,19 +106,16 @@ class TickerDetailsFragment : Fragment() {
                 }
 
                 val entries = ArrayList<CandleEntry>()
-                var index = 0f
-
-                for (v in values.reversed()) {
+                for (i in response.c.indices) {
                     entries.add(
                         CandleEntry(
-                            index,
-                            v.high.toFloat(),
-                            v.low.toFloat(),
-                            v.open.toFloat(),
-                            v.close.toFloat()
+                            i.toFloat(),
+                            response.h[i].toFloat(),
+                            response.l[i].toFloat(),
+                            response.o[i].toFloat(),
+                            response.c[i].toFloat()
                         )
                     )
-                    index += 1f
                 }
 
                 val set = CandleDataSet(entries, "Price").apply {
@@ -141,16 +135,12 @@ class TickerDetailsFragment : Fragment() {
                     binding.tickerCandleChart.description.isEnabled = false
                     binding.tickerCandleChart.legend.isEnabled = false
                     binding.tickerCandleChart.axisRight.isEnabled = false
-
                     binding.tickerCandleChart.axisLeft.textColor = Color.WHITE
                     binding.tickerCandleChart.xAxis.textColor = Color.WHITE
                     binding.tickerCandleChart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-
                     binding.tickerCandleChart.invalidate()
                 }
-
             } catch (e: Exception) {
-                e.printStackTrace()
                 requireActivity().runOnUiThread {
                     binding.tickerCandleChart.setNoDataText("Failed to load chart")
                 }

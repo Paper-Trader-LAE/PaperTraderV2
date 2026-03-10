@@ -1,0 +1,11 @@
+package com.example.papertraderv2
+
+data class FinnhubQuoteResponse(
+    val c: Double?,   // current price
+    val d: Double?,   // change
+    val dp: Double?,  // percent change
+    val h: Double?,   // high
+    val l: Double?,   // low
+    val o: Double?,   // open
+    val pc: Double?   // previous close
+)

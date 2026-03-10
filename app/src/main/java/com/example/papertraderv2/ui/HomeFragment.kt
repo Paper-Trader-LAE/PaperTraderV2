@@ -210,13 +210,12 @@ class HomeFragment : Fragment() {
 
             val fresh = stocks.map { s ->
                 try {
-                    val res = RetrofitClient.api.getTimeSeries(
+                    val res = RetrofitClient.api.getQuote(
                         symbol = s.symbol,
-                        interval = "1day",
-                        outputSize = 1,
-                        apiKey = BuildConfig.TWELVE_API_KEY
+                        token = BuildConfig.FINNHUB_API_KEY
                     )
-                    val price = res.values?.firstOrNull()?.close?.toDoubleOrNull() ?: s.price
+
+                    val price = res.c ?: s.price
                     s.copy(price = price)
                 } catch (e: Exception) {
                     s
