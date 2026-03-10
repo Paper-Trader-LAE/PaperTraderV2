@@ -56,4 +56,9 @@
         android:name="com.example.papertraderv2.ui.ModuleDetailFragment"
         android:label="Module Detail" />
 
+    <fragment
+        android:id="@+id/lessonDetailFragment"
+        android:name="com.example.papertraderv2.ui.LessonDetailFragment"
+        android:label="Lesson Detail" />
+
 </navigation>

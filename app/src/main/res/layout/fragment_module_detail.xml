@@ -1,61 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="#0D1B2A"
     android:padding="20dp">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/moduleTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Module Title"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:id="@+id/moduleDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Module Subtitle"
+        android:textSize="16sp"
+        android:textColor="#A0A0A0"
+        android:paddingBottom="14dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="8dp"
+        android:max="100"
+        android:progress="0"
+        android:progressDrawable="@drawable/progress_bar" />
 
-        <TextView
-            android:id="@+id/moduleTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Module Title"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:paddingBottom="8dp" />
+    <TextView
+        android:id="@+id/progressText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0% Complete"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:paddingTop="8dp"
+        android:paddingBottom="16dp" />
 
-        <TextView
-            android:id="@+id/moduleDescription"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Module Subtitle"
-            android:textSize="16sp"
-            android:textColor="#A0A0A0"
-            android:paddingBottom="20dp" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="8dp"
-            android:max="100"
-            android:progress="0"
-            android:progressDrawable="@drawable/progress_bar"
-            android:paddingBottom="20dp" />
-
-        <TextView
-            android:id="@+id/moduleContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Long formatted lesson text goes here..."
-            android:textColor="#FFFFFF"
-            android:textSize="16sp"
-            android:lineSpacingExtra="6dp" />
-
-        <Button
-            android:id="@+id/btnMarkComplete"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="Mark Complete"
-            android:textStyle="bold"
-            android:textColor="#0D1B2A"
-            android:backgroundTint="#00C896"
-            android:layout_marginTop="28dp" />
-    </LinearLayout>
-</ScrollView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lessonsRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

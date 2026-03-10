@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0D1B2A"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/lessonTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lesson Title"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/lessonSummary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lesson summary"
+            android:textSize="16sp"
+            android:textColor="#A0A0A0"
+            android:paddingBottom="20dp" />
+
+        <TextView
+            android:id="@+id/lessonContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lesson content"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:lineSpacingExtra="6dp" />
+
+        <Button
+            android:id="@+id/btnMarkComplete"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Mark Complete"
+            android:textStyle="bold"
+            android:textColor="#0D1B2A"
+            android:backgroundTint="#00C896"
+            android:layout_marginTop="28dp" />
+    </LinearLayout>
+</ScrollView>

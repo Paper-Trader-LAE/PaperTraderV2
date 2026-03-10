@@ -6,13 +6,13 @@ object ProgressRepository {
 
     private const val PREFS = "module_progress"
 
-    fun getProgress(context: Context, key: String): Int {
+    fun isLessonCompleted(context: Context, lessonKey: String): Boolean {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        return prefs.getInt(key, 0)
+        return prefs.getBoolean(lessonKey, false)
     }
 
-    fun setProgress(context: Context, key: String, value: Int) {
+    fun setLessonCompleted(context: Context, lessonKey: String, completed: Boolean) {
         val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-        prefs.edit().putInt(key, value).apply()
+        prefs.edit().putBoolean(lessonKey, completed).apply()
     }
 }
