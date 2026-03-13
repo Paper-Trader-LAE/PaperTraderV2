@@ -5,5 +5,9 @@ data class ForumPost(
     val title: String = "",
     val content: String = "",
     val author: String = "",
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = 0,
+
+    var upvotes: Int = 0,
+    var downvotes: Int = 0,
+    var commentCount: Int = 0
 )

@@ -1,7 +1,8 @@
 package com.example.papertraderv2.data
 
-import com.example.papertraderv2.models.ForumPost
 import com.example.papertraderv2.models.ForumComment
+import com.example.papertraderv2.models.ForumPost
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.tasks.await
@@ -11,10 +12,7 @@ class ForumRepository {
     private val db = FirebaseFirestore.getInstance()
     private val postsRef = db.collection("forum_posts")
 
-    // ---------------- POSTS ----------------
-
     suspend fun createPost(post: ForumPost) {
-        // If id is empty, let Firestore create it
         if (post.id.isBlank()) {
             postsRef.add(post).await()
         } else {
@@ -31,14 +29,15 @@ class ForumRepository {
         return snapshot.toObjects(ForumPost::class.java)
     }
 
-    // ---------------- COMMENTS ----------------
-
     suspend fun createComment(postId: String, comment: ForumComment) {
-        // Let Firestore auto-assign ID
         postsRef
             .document(postId)
             .collection("comments")
             .add(comment)
+            .await()
+
+        postsRef.document(postId)
+            .update("commentCount", FieldValue.increment(1))
             .await()
     }
 
@@ -51,5 +50,15 @@ class ForumRepository {
             .await()
 
         return snapshot.toObjects(ForumComment::class.java)
+    }
+
+    fun upvotePost(postId: String) {
+        postsRef.document(postId)
+            .update("upvotes", FieldValue.increment(1))
+    }
+
+    fun downvotePost(postId: String) {
+        postsRef.document(postId)
+            .update("downvotes", FieldValue.increment(1))
     }
 }
