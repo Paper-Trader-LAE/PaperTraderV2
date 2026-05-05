@@ -1,0 +1,9 @@
+Moving Averages
+
+Moving averages are indicators that smooth out price data to identify trends.
+
+They calculate the average price over a certain number of periods and display it as a line on the chart.
+
+Moving averages help traders see the overall direction of the market and identify potential entry points.
+
+They are one of the most commonly used tools in technical analysis.

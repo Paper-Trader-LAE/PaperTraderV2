@@ -1,0 +1,9 @@
+Candlestick Basics
+
+Candlesticks are a way of representing price movement on a chart. Each candlestick shows the open, high, low, and close prices within a specific time period.
+
+The body of the candle represents the difference between the opening and closing prices, while the wicks show the highest and lowest points reached.
+
+Candlestick charts are widely used because they provide clear visual information about market behavior.
+
+Understanding candlesticks is the foundation of technical analysis.

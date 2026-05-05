@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.papertraderv2.R
 import com.example.papertraderv2.models.Trade
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -16,8 +15,10 @@ class TradeHistoryAdapter(
 ) : RecyclerView.Adapter<TradeHistoryAdapter.VH>() {
 
     class VH(view: View) : RecyclerView.ViewHolder(view) {
+        val badge: TextView = view.findViewById(R.id.tradeBadge)
         val title: TextView = view.findViewById(R.id.tradeTitle)
         val meta: TextView = view.findViewById(R.id.tradeMeta)
+        val price: TextView = view.findViewById(R.id.tradePrice)
         val time: TextView = view.findViewById(R.id.tradeTime)
     }
 
@@ -27,13 +28,27 @@ class TradeHistoryAdapter(
     }
 
     override fun onBindViewHolder(holder: VH, position: Int) {
-        val t = list[position]
-        holder.title.text = "${t.action.uppercase()} ${t.symbol}"
+        val trade = list[position]
+        val action = trade.action.trim().uppercase(Locale.getDefault())
+        val isBuy = action == "BUY"
 
-        holder.meta.text = "Qty: ${t.quantity}  •  Price: $${"%.4f".format(t.price)}  •  Total: $${"%.2f".format(t.total)}"
+        holder.itemView.setBackgroundResource(
+            if (isBuy) R.drawable.bg_trade_buy_card else R.drawable.bg_trade_sell_card
+        )
+
+        holder.badge.text = if (isBuy) "BUY" else "SELL"
+        holder.badge.setBackgroundResource(
+            if (isBuy) R.drawable.bg_trade_badge_buy else R.drawable.bg_trade_badge_sell
+        )
+
+        val formattedAction = if (isBuy) "Buy" else "Sell"
+        holder.title.text = "$formattedAction ${trade.symbol.uppercase(Locale.getDefault())}"
+
+        holder.meta.text = "${"%.2f".format(trade.quantity)} lots"
+        holder.price.text = "$${"%.2f".format(trade.price)}"
 
         val df = SimpleDateFormat("MMM d", Locale.getDefault())
-        holder.time.text = df.format(Date(t.timestamp))
+        holder.time.text = df.format(Date(trade.timestamp))
     }
 
     override fun getItemCount(): Int = list.size

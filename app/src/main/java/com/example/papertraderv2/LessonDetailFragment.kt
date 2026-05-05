@@ -31,11 +31,11 @@ class LessonDetailFragment : Fragment() {
 
         val title = arguments?.getString("lessonTitle") ?: ""
         val summary = arguments?.getString("lessonSummary") ?: ""
-        val content = arguments?.getString("lessonContent") ?: ""
+        val lessonFilePath = arguments?.getString("lessonContent") ?: ""
 
         binding.lessonTitle.text = title
         binding.lessonSummary.text = summary
-        binding.lessonContent.text = content
+        binding.lessonContent.text = loadLessonFromAssets(lessonFilePath)
 
         val completed = ProgressRepository.isLessonCompleted(requireContext(), lessonKey)
         binding.btnMarkComplete.text = if (completed) "Completed" else "Mark Complete"
@@ -47,6 +47,16 @@ class LessonDetailFragment : Fragment() {
             parentFragmentManager.setFragmentResult("lesson_completed", Bundle().apply {
                 putString("moduleKey", moduleKey)
             })
+        }
+    }
+
+    private fun loadLessonFromAssets(filePath: String): String {
+        return try {
+            requireContext().assets.open(filePath).bufferedReader().use {
+                it.readText()
+            }
+        } catch (e: Exception) {
+            "Lesson content could not be loaded.\n\nMissing file path:\n$filePath"
         }
     }
 

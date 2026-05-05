@@ -1,0 +1,11 @@
+What Is Trading?
+
+Trading is the act of buying and selling financial assets with the goal of making a profit from changes in price. These assets can include stocks, currencies, cryptocurrencies, commodities, and indices. Traders aim to take advantage of price movements, whether those movements happen over minutes, hours, or days.
+
+At its core, trading is based on predicting whether the price of an asset will go up or down. If a trader believes the price will increase, they will buy the asset and later sell it at a higher price. If they believe the price will decrease, they may sell first and buy back later at a lower price.
+
+Unlike long-term investing, which focuses on holding assets for extended periods, trading is more active and requires constant decision-making. Traders analyze charts, news, and market conditions to make informed decisions rather than relying on guesswork.
+
+It is important to understand that trading is not gambling. Successful traders rely on discipline, strategy, and risk management. They follow structured plans and avoid emotional decision-making.
+
+In PaperTrader, you are able to practice trading without using real money. This allows you to build experience, understand how markets behave, and develop your own trading style in a safe environment.

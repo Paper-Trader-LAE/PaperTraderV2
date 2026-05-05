@@ -4,18 +4,30 @@
     android:layout_height="match_parent"
     android:background="#0D0D0D"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:paddingBottom="86dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Post"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
 
     <EditText
         android:id="@+id/inputPostTitle"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="52dp"
         android:hint="Post Title"
         android:textColor="#FFFFFF"
-        android:textColorHint="#888888"
-        android:padding="12dp"
-        android:backgroundTint="#FFFFFF"
-        android:layout_marginBottom="16dp"/>
+        android:textColorHint="#555555"
+        android:background="@drawable/bg_card_dark"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="15sp"
+        android:layout_marginBottom="12dp" />
 
     <EditText
         android:id="@+id/inputPostContent"
@@ -23,18 +35,20 @@
         android:layout_height="180dp"
         android:hint="Write something..."
         android:textColor="#FFFFFF"
-        android:textColorHint="#888888"
-        android:padding="12dp"
-        android:backgroundTint="#FFFFFF"
-        android:gravity="top"/>
+        android:textColorHint="#555555"
+        android:background="@drawable/bg_card_dark"
+        android:padding="16dp"
+        android:textSize="15sp"
+        android:gravity="top"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/btnSubmitPost"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="52dp"
         android:text="Post"
-        android:textColor="#0D0D0D"
+        android:textColor="#FFFFFF"
         android:textStyle="bold"
-        android:backgroundTint="#00C896"
-        android:layout_marginTop="24dp"/>
+        android:textSize="15sp"
+        android:backgroundTint="#4B6BFB" />
 </LinearLayout>

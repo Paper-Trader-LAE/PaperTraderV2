@@ -1,0 +1,13 @@
+Bid, Ask, and Spread
+
+Every trade in the market involves two prices: the bid price and the ask price.
+
+The bid price is the highest price a buyer is willing to pay for an asset. The ask price is the lowest price a seller is willing to accept.
+
+The difference between these two prices is called the spread. The spread represents the cost of entering a trade.
+
+For example, if the bid price is 100 and the ask price is 101, the spread is 1. This means the price must move in your favor before you can make a profit.
+
+Smaller spreads are generally better for traders because they reduce trading costs. Larger spreads can make it harder to profit, especially in short-term trading.
+
+Understanding the bid, ask, and spread helps traders make more informed decisions when entering and exiting trades.

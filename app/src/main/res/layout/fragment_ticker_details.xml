@@ -8,14 +8,16 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:paddingBottom="100dp">
 
-        <!-- Title + Price -->
+        <!-- Title + Price Row -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:layout_marginBottom="16dp">
 
             <TextView
                 android:id="@+id/tickerTitle"
@@ -24,7 +26,7 @@
                 android:layout_weight="1"
                 android:text="AAPL"
                 android:textColor="#FFFFFF"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -32,54 +34,56 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$0.0000"
-                android:textColor="#00C896"
-                android:textSize="18sp"
-                android:paddingStart="8dp" />
+                android:textColor="#4B6BFB"
+                android:textSize="20sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
-        <!-- FIXED HEIGHT CHART -->
+        <!-- Chart -->
         <com.github.mikephil.charting.charts.CandleStickChart
             android:id="@+id/tickerCandleChart"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_marginTop="16dp" />
+            android:layout_height="320dp"
+            android:background="@drawable/bg_card_dark" />
 
-        <!-- BUY / SELL / WATCHLIST BUTTONS -->
+        <!-- Action Buttons -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_height="52dp"
             android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/btnBuy"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Buy"
-                android:backgroundTint="#00C896"
-                android:textColor="#0D0D0D"/>
+                android:backgroundTint="#2A7A2A"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnSell"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:text="Sell"
-                android:backgroundTint="#E53935"
-                android:textColor="#FFFFFF"/>
+                android:backgroundTint="#8B2020"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnWatchlist"
                 android:layout_width="0dp"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
                 android:text="Watchlist"
-                android:backgroundTint="#1B1B1B"
-                android:textColor="#FFFFFF"/>
+                android:backgroundTint="#2A2A2A"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

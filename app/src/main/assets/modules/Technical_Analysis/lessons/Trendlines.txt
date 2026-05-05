@@ -1,0 +1,13 @@
+Trendlines
+
+Trendlines are lines drawn on a chart to help identify the direction of price movement.
+
+In an uptrend, a trendline is usually drawn by connecting higher lows. This helps show where price may continue to find support as it moves upward.
+
+In a downtrend, a trendline is usually drawn by connecting lower highs. This helps show where price may continue to face resistance as it moves downward.
+
+Trendlines are useful because they make market structure easier to see. They can help traders identify possible entry points, exits, and trend changes.
+
+A trendline should not be forced onto a chart. It should connect clear price points and make sense visually. If price keeps respecting the trendline, it may be a useful guide.
+
+Traders often combine trendlines with other tools such as support and resistance, moving averages, or candlestick patterns to confirm their decisions.

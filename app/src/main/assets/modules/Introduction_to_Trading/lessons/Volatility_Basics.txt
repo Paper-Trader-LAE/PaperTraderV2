@@ -1,0 +1,9 @@
+Volatility Basics
+
+Volatility refers to how much the price of an asset moves over a period of time. High volatility means prices are changing rapidly, while low volatility means prices are relatively stable.
+
+Volatility is important because it affects both risk and opportunity. Higher volatility can lead to larger profits, but it also increases the potential for losses.
+
+Traders must adjust their strategies based on market volatility. For example, during high volatility, traders may use wider stop losses to avoid being stopped out too quickly.
+
+Understanding volatility helps traders manage risk and choose the right conditions for their trading strategy.

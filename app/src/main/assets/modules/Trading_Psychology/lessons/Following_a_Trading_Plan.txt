@@ -1,0 +1,13 @@
+Following a Trading Plan
+
+A trading plan is a set of rules that guides how a trader makes decisions.
+
+A strong trading plan includes what markets to trade, when to trade, what setups to look for, how much to risk, where to place a stop loss, and when to take profit.
+
+Following a trading plan helps remove emotion from trading. Without a plan, traders are more likely to make random decisions based on fear, greed, or excitement.
+
+A plan also helps traders review their performance. If a trade loses but followed the plan, it may still be considered a good trade. If a trade wins but broke the rules, it may create bad habits.
+
+Consistency is one of the most important parts of trading. A trader cannot improve if they constantly change strategies or ignore their rules.
+
+In PaperTrader, users can practice building discipline by treating simulated trades as if they were real. The goal is to develop habits that can transfer to real trading environments.

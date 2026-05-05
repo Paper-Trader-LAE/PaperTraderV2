@@ -1,0 +1,13 @@
+Bullish and Bearish Candles
+
+Bullish and bearish candles help traders understand who controlled price during a specific period of time.
+
+A bullish candle means the price closed higher than it opened. This usually shows that buyers were stronger during that candle. Bullish candles are often shown as green or white on most charts.
+
+A bearish candle means the price closed lower than it opened. This usually shows that sellers were stronger during that candle. Bearish candles are often shown as red or black.
+
+The body of the candle shows the distance between the open and close price. A large body usually means strong momentum. A small body may mean hesitation or indecision in the market.
+
+The wicks show the highest and lowest prices reached during that time period. Long wicks can show rejection, meaning price tried to move in one direction but was pushed back.
+
+Understanding bullish and bearish candles helps traders read market pressure. Instead of guessing, traders can use candles to see whether buyers or sellers are currently stronger.

@@ -1,0 +1,13 @@
+Combining Confluences
+
+Confluence means using multiple pieces of evidence to support a trading decision.
+
+For example, a trader may see price near support, a bullish candlestick pattern, and an oversold RSI reading. Each signal alone may not be enough, but together they create stronger confirmation.
+
+Combining confluences helps traders avoid entering trades based on only one reason. This can reduce impulsive decisions and improve trade quality.
+
+Common confluences include trend direction, support and resistance, candlestick patterns, moving averages, RSI, MACD, and market structure.
+
+A good trade setup usually has several reasons behind it. The goal is not to find a perfect trade, but to find trades where the evidence supports the decision.
+
+In PaperTrader, practicing with confluences can help you build a habit of thinking before entering trades. Instead of pressing buy or sell randomly, you learn to ask, “What evidence supports this trade?”

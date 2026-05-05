@@ -1,0 +1,9 @@
+Using a Take Profit
+
+A take profit is an order that automatically closes a trade when a target profit level is reached.
+
+It allows traders to lock in gains without needing to monitor the market constantly. This helps remove emotional decision-making.
+
+Setting a take profit ensures that you exit trades according to your plan rather than reacting to short-term price changes.
+
+Combining take profit with stop loss creates a structured approach to trading.

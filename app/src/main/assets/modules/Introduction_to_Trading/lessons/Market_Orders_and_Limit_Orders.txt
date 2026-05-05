@@ -1,0 +1,11 @@
+Market Orders and Limit Orders
+
+There are different types of orders that traders use to enter and exit the market.
+
+A market order executes immediately at the current market price. This is the fastest way to enter a trade, but the exact price may vary slightly.
+
+A limit order allows you to set a specific price at which you want to enter a trade. The trade will only execute if the market reaches that price.
+
+Market orders are useful when you want immediate execution, while limit orders are useful when you want more control over your entry price.
+
+Understanding order types helps traders execute their strategies more effectively and manage risk more precisely.

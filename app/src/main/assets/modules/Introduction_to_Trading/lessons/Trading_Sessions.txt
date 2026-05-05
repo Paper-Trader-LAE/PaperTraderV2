@@ -1,0 +1,9 @@
+Trading Sessions
+
+Financial markets operate in different sessions based on global time zones. The three major trading sessions are the Asian session, the London session, and the New York session.
+
+Each session has unique characteristics. The Asian session is typically quieter with lower volatility. The London session is more active, with increased trading volume. The New York session overlaps with London and often produces the highest volatility.
+
+Understanding trading sessions is important because market activity changes throughout the day. Some strategies work better during high volatility, while others perform better in stable conditions.
+
+By knowing when the market is most active, traders can choose the best time to trade based on their strategy.

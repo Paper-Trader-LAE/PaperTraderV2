@@ -1,0 +1,9 @@
+RSI Basics
+
+The Relative Strength Index (RSI) is an indicator that measures the strength of price movement.
+
+It ranges from 0 to 100 and helps identify overbought and oversold conditions.
+
+High RSI values suggest that an asset may be overbought, while low values suggest it may be oversold.
+
+Traders use RSI to identify potential reversals and confirm trends.

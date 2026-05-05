@@ -1,0 +1,13 @@
+Long and Short Positions
+
+In trading, you can profit from both rising and falling markets by taking long or short positions.
+
+A long position means buying an asset with the expectation that its price will increase. If the price rises, the trader can sell the asset at a higher price and make a profit.
+
+A short position means selling an asset with the expectation that its price will decrease. In this case, the trader sells first and buys back later at a lower price, profiting from the difference.
+
+Short selling allows traders to take advantage of downward market movements, which is something that traditional investors cannot easily do.
+
+Understanding long and short positions is essential because markets do not always move upward. Being able to adapt to both directions gives traders more opportunities.
+
+In PaperTrader, you can practice both long and short trades to understand how each works in different market conditions.

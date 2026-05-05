@@ -1,52 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     android:padding="32dp"
-    android:background="#0D1B2A">
+    android:background="#0D0D0D">
+
+    <!-- App Title -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PaperTrader"
+        android:textSize="30sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
 
     <TextView
-        android:text="Login"
-        android:textSize="26sp"
-        android:textColor="#00C896"
-        android:layout_marginBottom="24dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="Welcome back"
+        android:textSize="14sp"
+        android:textColor="#666666"
+        android:layout_marginBottom="36dp" />
 
     <EditText
         android:id="@+id/loginEmail"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:textColor="#FFFFFF"
-        android:textColorHint="#00C896"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textColorHint="#555555"
+        android:background="@drawable/bg_card_dark"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="15sp"
+        android:layout_marginBottom="12dp" />
 
     <EditText
         android:id="@+id/loginPassword"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
         android:hint="Password"
         android:inputType="textPassword"
         android:textColor="#FFFFFF"
-        android:textColorHint="#00C896"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textColorHint="#555555"
+        android:background="@drawable/bg_card_dark"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="15sp"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/loginBtn"
         android:text="Login"
-        android:backgroundTint="#00C896"
-        android:textColor="#0D1B2A"
+        android:backgroundTint="#4B6BFB"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="15sp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp" />
+        android:layout_height="52dp"
+        android:layout_marginBottom="16dp" />
 
     <TextView
         android:id="@+id/toSignup"
         android:text="Don't have an account? Sign Up"
-        android:textColor="#00C896"
-        android:layout_marginTop="16dp"
+        android:textColor="#4B6BFB"
+        android:textSize="14sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/loginLogo"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="PaperTrader Logo"
+        android:src="@drawable/pt_logo" />
 
 </LinearLayout>

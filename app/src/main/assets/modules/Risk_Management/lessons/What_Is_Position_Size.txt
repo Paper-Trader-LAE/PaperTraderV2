@@ -1,0 +1,9 @@
+What Is Position Size?
+
+Position size refers to how much of an asset you are buying or selling in a trade. It directly affects how much money you gain or lose.
+
+Larger position sizes increase both potential profits and potential losses. Smaller position sizes reduce risk but also reduce profit potential.
+
+Choosing the correct position size is essential for controlling risk. It should always be based on your account size and how much you are willing to risk on a trade.
+
+Proper position sizing ensures that no single trade can significantly damage your account.

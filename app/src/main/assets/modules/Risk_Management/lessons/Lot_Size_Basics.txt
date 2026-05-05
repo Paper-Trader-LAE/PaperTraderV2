@@ -1,0 +1,9 @@
+Lot Size Basics
+
+Lot size is a standardized way of measuring trade size, especially in forex markets.
+
+A standard lot represents a large amount of currency, while mini and micro lots represent smaller amounts. Smaller lot sizes are typically safer for beginners.
+
+Using the correct lot size helps traders manage their exposure to the market. Larger lot sizes mean larger price movements will impact your account more significantly.
+
+Understanding lot sizes is important because it allows you to control risk and scale your trading appropriately.

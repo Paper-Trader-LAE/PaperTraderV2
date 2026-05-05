@@ -1,0 +1,13 @@
+MACD Basics
+
+MACD stands for Moving Average Convergence Divergence. It is a technical indicator used to help traders identify momentum and possible trend changes.
+
+The MACD is usually made of two lines: the MACD line and the signal line. When these lines cross, traders may use that as a possible sign of changing momentum.
+
+If the MACD line crosses above the signal line, it may suggest bullish momentum. This means buyers may be gaining strength.
+
+If the MACD line crosses below the signal line, it may suggest bearish momentum. This means sellers may be gaining strength.
+
+The MACD also includes a histogram, which shows the distance between the two lines. A growing histogram can suggest increasing momentum, while a shrinking histogram can suggest weakening momentum.
+
+MACD should not be used by itself. It works best when combined with trend direction, support and resistance, and other forms of confirmation.

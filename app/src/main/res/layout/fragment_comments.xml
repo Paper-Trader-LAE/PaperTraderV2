@@ -2,57 +2,63 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#05102A">
+    android:background="#0D0D0D">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentsRecycler"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:padding="12dp"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="8dp"
+        android:clipToPadding="false"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/commentInputContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- Comment Input Bar -->
     <LinearLayout
         android:id="@+id/commentInputContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="120dp"
-        android:background="#0B1738"
+        android:background="@drawable/bg_card_dark"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginBottom="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
             android:id="@+id/commentInput"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="44dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:hint="Write a comment..."
+            android:hint="Make a comment"
             android:textColor="#FFFFFF"
-            android:textColorHint="#888888"
-            tools:layout_editor_absoluteX="24dp"
-            tools:layout_editor_absoluteY="562dp" />
+            android:textColorHint="#666666"
+            android:textSize="14sp"
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/btnSendComment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#00C896"
+            android:layout_width="70dp"
+            android:layout_height="38dp"
+            android:backgroundTint="#4B6BFB"
             android:text="Send"
-            android:textColor="#000000"
-            tools:layout_editor_absoluteX="299dp"
-            tools:layout_editor_absoluteY="551dp" />
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

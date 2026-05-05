@@ -3,12 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0D1B2A"
-    android:padding="16dp">
+    android:background="#0D0D0D"
+    android:paddingBottom="86dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/modulesRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:paddingStart="14dp"
+        android:paddingEnd="14dp"
+        android:paddingTop="14dp"
+        android:clipToPadding="false" />
 
 </LinearLayout>

@@ -1,0 +1,9 @@
+Risk-to-Reward Ratio
+
+Risk-to-reward ratio compares how much you are risking on a trade to how much you expect to gain.
+
+For example, risking $10 to make $30 results in a 1:3 risk-to-reward ratio. This means your potential reward is three times your risk.
+
+Good traders focus on maintaining favorable risk-to-reward ratios. Even if they lose multiple trades, one winning trade can recover those losses.
+
+This concept helps traders stay profitable over time, even with a lower win rate.

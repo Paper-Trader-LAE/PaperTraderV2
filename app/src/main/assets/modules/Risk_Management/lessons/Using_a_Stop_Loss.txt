@@ -1,0 +1,9 @@
+Using a Stop Loss
+
+A stop loss is a tool that automatically closes a trade when the price reaches a certain level. It is used to limit losses.
+
+Setting a stop loss protects your account from large losses if the market moves against you. It allows you to define your risk before entering a trade.
+
+Without a stop loss, losses can grow quickly and become difficult to control. Many beginner traders avoid using stop losses and end up losing more than expected.
+
+Using a stop loss is a key part of disciplined trading and risk management.
