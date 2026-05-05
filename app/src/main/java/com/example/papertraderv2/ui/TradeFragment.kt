@@ -24,6 +24,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.CandleData
 import com.github.mikephil.charting.data.CandleDataSet
 import com.github.mikephil.charting.data.CandleEntry
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,11 +39,17 @@ class TradeFragment : Fragment() {
     private var selectedSymbol = "SPY"
     private var livePrice = 0.0
 
+    private val startingBalance = 500.0
     private val handler = Handler(Looper.getMainLooper())
+
+    private fun currentUserId(): String {
+        return FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
+    }
+
     private val refreshRunnable = object : Runnable {
         override fun run() {
             if (selectedSymbol.isNotBlank()) {
-                loadPrice(selectedSymbol)   // Finnhub
+                loadPrice(selectedSymbol)
             }
             handler.postDelayed(this, 15000)
         }
@@ -70,6 +77,7 @@ class TradeFragment : Fragment() {
         binding.currentSymbolText.text = selectedSymbol
         binding.searchInput.setText(selectedSymbol)
 
+        loadAccountSummary()
         loadPrice(selectedSymbol)
         loadCandleData(selectedSymbol)
 
@@ -79,6 +87,7 @@ class TradeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        loadAccountSummary()
         handler.post(refreshRunnable)
     }
 
@@ -135,6 +144,7 @@ class TradeFragment : Fragment() {
 
             if (isSearchAction || isEnterKey) {
                 val rawQuery = v.text.toString().trim()
+
                 if (rawQuery.isNotBlank()) {
                     val symbol = normalizeQuery(rawQuery)
                     selectedSymbol = symbol
@@ -142,6 +152,7 @@ class TradeFragment : Fragment() {
                     loadPrice(symbol)
                     loadCandleData(symbol)
                 }
+
                 true
             } else {
                 false
@@ -165,6 +176,25 @@ class TradeFragment : Fragment() {
 
     private fun normalizeQuery(query: String): String {
         return SymbolMapper.toSymbol(query).uppercase()
+    }
+
+    private fun loadAccountSummary() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val trades = AppDatabase.getDatabase(requireContext())
+                .tradeDao()
+                .getTradesForUser(currentUserId())
+
+            val amountUsed = trades.sumOf { trade ->
+                if (trade.action.equals("BUY", true)) trade.total else -trade.total
+            }.coerceAtLeast(0.0)
+
+            val balance = (startingBalance - amountUsed).coerceAtLeast(0.0)
+
+            requireActivity().runOnUiThread {
+                binding.textAccountBalance.text = "$${"%.2f".format(balance)}"
+                binding.textAmountUsed.text = "$${"%.2f".format(amountUsed)}"
+            }
+        }
     }
 
     private fun loadPrice(symbol: String) {
@@ -220,7 +250,6 @@ class TradeFragment : Fragment() {
 
                 val entries = ArrayList<CandleEntry>()
                 var index = 0f
-
                 val sortedSeries = series.toSortedMap()
 
                 for ((_, candle) in sortedSeries) {
@@ -230,15 +259,7 @@ class TradeFragment : Fragment() {
                     val close = candle.close?.toFloatOrNull()
 
                     if (open != null && high != null && low != null && close != null) {
-                        entries.add(
-                            CandleEntry(
-                                index,
-                                high,
-                                low,
-                                open,
-                                close
-                            )
-                        )
+                        entries.add(CandleEntry(index, high, low, open, close))
                         index += 1f
                     }
                 }
@@ -262,10 +283,8 @@ class TradeFragment : Fragment() {
                     setDrawValues(false)
                 }
 
-                val data = CandleData(set)
-
                 requireActivity().runOnUiThread {
-                    binding.tradeCandleChart.data = data
+                    binding.tradeCandleChart.data = CandleData(set)
                     binding.tradeCandleChart.description.isEnabled = false
                     binding.tradeCandleChart.legend.isEnabled = false
                     binding.tradeCandleChart.axisRight.isEnabled = false
@@ -306,6 +325,7 @@ class TradeFragment : Fragment() {
 
         val trade = Trade(
             id = 0,
+            userId = currentUserId(),
             symbol = selectedSymbol,
             action = action,
             quantity = qty,
@@ -318,6 +338,7 @@ class TradeFragment : Fragment() {
 
             requireActivity().runOnUiThread {
                 Toast.makeText(requireContext(), "$action order placed!", Toast.LENGTH_SHORT).show()
+                loadAccountSummary()
                 parentFragmentManager.setFragmentResult("trade_made", Bundle())
             }
         }

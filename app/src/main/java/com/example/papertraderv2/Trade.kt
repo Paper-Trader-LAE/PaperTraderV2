@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey
 data class Trade(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
+    val userId: String = "",
     val symbol: String,
-    val action: String,   // "Buy" or "Sell"
+    val action: String,
     val quantity: Double,
     val price: Double,
     val total: Double,

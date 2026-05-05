@@ -4,19 +4,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#000000"
-    android:paddingStart="14dp"
-    android:paddingEnd="14dp"
-    android:paddingTop="28dp"
-    android:paddingBottom="86dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="16dp"
+    android:paddingBottom="16dp">
 
     <LinearLayout
         android:id="@+id/portfolioCard"
         android:layout_width="match_parent"
-        android:layout_height="220dp"
+        android:layout_height="180dp"
         android:orientation="vertical"
-        android:background="@drawable/bg_home_chart_card"
+        android:background="@drawable/bg_card_dark"
         android:padding="16dp"
-        android:layout_marginBottom="20dp">
+        android:layout_marginBottom="16dp">
 
         <TextView
             android:id="@+id/portfolioBalance"
@@ -48,10 +48,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/homeFilterRecycler"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginBottom="18dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="12dp"
         android:clipToPadding="false" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -59,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:paddingBottom="12dp" />
 
 </LinearLayout>

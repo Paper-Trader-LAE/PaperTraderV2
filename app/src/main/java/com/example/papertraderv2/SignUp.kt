@@ -2,7 +2,10 @@ package com.example.papertraderv2
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
@@ -45,10 +48,16 @@ class SignUp : AppCompatActivity() {
                     )
 
                     db.collection("users").document(userId).set(userData)
-
-                    Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, Login::class.java))
-                    finish()
+                        .addOnSuccessListener {
+                            Toast.makeText(this, "Account created!", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
+                        .addOnFailureListener {
+                            Toast.makeText(this, "Account created, but profile save failed.", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, MainActivity::class.java))
+                            finish()
+                        }
                 }
                 .addOnFailureListener {
                     Toast.makeText(this, "Sign up failed: ${it.message}", Toast.LENGTH_SHORT).show()

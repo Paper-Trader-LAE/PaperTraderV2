@@ -9,7 +9,7 @@
             android:title="Home" />
 
         <item
-            android:id="@+id/nav_modules"
+            android:id="@+id/nav_learn"
             android:icon="@drawable/ic_modules"
             android:title="Modules" />
 
@@ -22,6 +22,7 @@
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings"
             android:title="Settings" />
+
     </group>
 
 </menu>

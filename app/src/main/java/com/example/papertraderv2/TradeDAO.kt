@@ -11,6 +11,9 @@ interface TradeDao {
     @Insert
     suspend fun insertTrade(trade: Trade)
 
-    @Query("SELECT * FROM trades ORDER BY timestamp DESC")
-    suspend fun getAllTrades(): List<Trade>
+    @Query("SELECT * FROM trades WHERE userId = :userId ORDER BY timestamp DESC")
+    suspend fun getTradesForUser(userId: String): List<Trade>
+
+    @Query("DELETE FROM trades WHERE userId = :userId")
+    suspend fun deleteTradesForUser(userId: String)
 }

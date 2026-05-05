@@ -43,7 +43,7 @@ class CommentsFragment : Fragment() {
         binding.commentsRecycler.layoutManager = LinearLayoutManager(requireContext())
         binding.commentsRecycler.adapter = adapter
 
-        binding.btnSendComment.setOnClickListener {
+        binding.sendBtn.setOnClickListener {
             val text = binding.commentInput.text.toString().trim()
             if (text.isEmpty()) return@setOnClickListener
 

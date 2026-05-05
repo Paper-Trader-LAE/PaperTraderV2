@@ -1,5 +1,6 @@
 package com.example.papertraderv2.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +22,7 @@ import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -45,13 +47,16 @@ class HomeFragment : Fragment() {
 
     private lateinit var stockAdapter: StockAdapter
 
+    private fun currentUserId(): String {
+        return FirebaseAuth.getInstance().currentUser?.uid ?: "guest"
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
-
 
         portfolioBalanceText = view.findViewById(R.id.portfolioBalance)
         portfolioGrowthText = view.findViewById(R.id.portfolioGrowth)
@@ -131,7 +136,7 @@ class HomeFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val trades = AppDatabase.getDatabase(requireContext())
                 .tradeDao()
-                .getAllTrades()
+                .getTradesForUser(currentUserId())
 
             requireActivity().runOnUiThread {
                 recyclerView.adapter = TradeHistoryAdapter(trades)
@@ -143,7 +148,7 @@ class HomeFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val trades = AppDatabase.getDatabase(requireContext())
                 .tradeDao()
-                .getAllTrades()
+                .getTradesForUser(currentUserId())
 
             val grouped = trades.groupBy { it.symbol }
 
@@ -183,18 +188,17 @@ class HomeFragment : Fragment() {
         onComplete: () -> Unit = {}
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-
-            val fresh = stocks.map { stock ->
+            val fresh = stocks.map { s ->
                 try {
-                    val response = RetrofitClient.api.getQuote(
-                        symbol = stock.symbol,
+                    val res = RetrofitClient.api.getQuote(
+                        symbol = s.symbol,
                         token = BuildConfig.FINNHUB_API_KEY
                     )
 
-                    val price = response.c ?: stock.price
-                    stock.copy(price = price)
+                    val price = res.c ?: s.price
+                    s.copy(price = price)
                 } catch (e: Exception) {
-                    stock
+                    s
                 }
             }
 
@@ -206,7 +210,7 @@ class HomeFragment : Fragment() {
                     stockAdapter.notifyDataSetChanged()
                 }
 
-                if (selectedFilterIndex == 0) {
+                if (selectedFilterIndex == 0 && stocks === yourStocks) {
                     updatePortfolioUI()
                 }
 
@@ -234,6 +238,7 @@ class HomeFragment : Fragment() {
         val action = if (qty > 0) "Sell" else "Buy"
 
         val trade = Trade(
+            userId = currentUserId(),
             symbol = stock.symbol,
             action = action,
             quantity = abs(qty),
@@ -264,11 +269,9 @@ class HomeFragment : Fragment() {
         }
 
         val totalValue = yourStocks.sumOf { it.price * it.quantity }
-
         portfolioBalanceText.text = "$${"%.2f".format(totalValue)}"
 
         val startValue = totalValue * 0.96
-
         val entries = listOf(
             Entry(0f, startValue.toFloat()),
             Entry(1f, (startValue * 1.01).toFloat()),
@@ -281,13 +284,22 @@ class HomeFragment : Fragment() {
 
         portfolioGrowthText.text = "$sign${"%.2f".format(abs(growth))}% Today"
 
-        val dataSet = LineDataSet(entries, "Growth")
-        chart.data = LineData(dataSet)
+        val ds = LineDataSet(entries, "Growth").apply {
+            color = Color.parseColor("#00C896")
+            lineWidth = 2.5f
+            setDrawValues(false)
+            setDrawCircles(false)
+            setDrawFilled(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+        }
+
+        chart.data = LineData(ds)
+        styleChart()
         chart.invalidate()
     }
 
     private fun setupEmptyChart() {
-        val dataSet = LineDataSet(
+        val ds = LineDataSet(
             listOf(
                 Entry(0f, 0f),
                 Entry(1f, 0f),
@@ -295,9 +307,37 @@ class HomeFragment : Fragment() {
                 Entry(3f, 0f)
             ),
             "Empty"
-        )
+        ).apply {
+            color = Color.parseColor("#00C896")
+            lineWidth = 2.5f
+            setDrawValues(false)
+            setDrawCircles(false)
+            setDrawFilled(false)
+            mode = LineDataSet.Mode.CUBIC_BEZIER
+        }
 
-        chart.data = LineData(dataSet)
+        chart.data = LineData(ds)
+        styleChart()
         chart.invalidate()
+    }
+
+    private fun styleChart() {
+        chart.setBackgroundColor(Color.TRANSPARENT)
+        chart.description.isEnabled = false
+        chart.legend.isEnabled = false
+        chart.axisRight.isEnabled = false
+
+        chart.axisLeft.isEnabled = true
+        chart.axisLeft.textColor = Color.parseColor("#AAAAAA")
+        chart.axisLeft.gridColor = Color.parseColor("#444444")
+
+        chart.xAxis.isEnabled = true
+        chart.xAxis.textColor = Color.parseColor("#AAAAAA")
+        chart.xAxis.gridColor = Color.parseColor("#444444")
+
+        chart.setTouchEnabled(false)
+        chart.setScaleEnabled(false)
+        chart.setDrawGridBackground(false)
+        chart.setDrawBorders(false)
     }
 }
